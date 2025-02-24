@@ -1,39 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Chat App</title>
-    <style>
-        /* Basic styling */
-    </style>
+    <title>Chat Room</title>
 </head>
 <body>
-    <div id="chat-log"></div>
-    <input id="chat-message-input" type="text" size="100" />
-    <input id="chat-message-submit" type="button" value="Send" />
-    
-    <script>
-        const chatSocket = new WebSocket(
-            'ws://' + window.location.host + '/ws/chat/'
-        );
+    <h2>Chat Room</h2>
+    <div id="chat-box">
+        {% for message in messages %}
+            <p><strong>{{ message.user.username }}:</strong> {{ message.content }}</p>
+        {% endfor %}
+    </div>
 
-chatSocket.onmessage = function(e) {
+    <input id="message-input" type="text" placeholder="Écrire un message...">
+    <button id="send-button">Envoyer</button>
+
+    <script>
+        const chatSocket = new WebSocket("ws://" + window.location.host + "/ws/chat/");
+
+        chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').value += (data.message + '\n');
+            document.getElementById("chat-box").innerHTML += "<p><strong>" + data.username + ":</strong> " + data.message + "</p>";
         };
-        document.querySelector('#chat-message-input').focus();
-        document.querySelector('#chat-message-input').onkeyup = function(e) {
-            if (e.keyCode === 13) {  // Enter key
-                document.querySelector('#chat-message-submit').click();
-            }
-        };
-        document.querySelector('#chat-message-submit').onclick = function(e) {
-            const messageInputDom = document.querySelector('#chat-message-input');
-            const message = messageInputDom.value;
+
+        document.getElementById("send-button").onclick = function() {
+            const messageInput = document.getElementById("message-input");
             chatSocket.send(JSON.stringify({
-                'message': message
+                "message": messageInput.value,
+                "username": "{{ user.username }}"
             }));
-            messageInputDom.value = '';
+            messageInput.value = "";
         };
     </script>
 </body>

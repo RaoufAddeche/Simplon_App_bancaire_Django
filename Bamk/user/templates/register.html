@@ -1,33 +1,24 @@
-{% load static tailwind_tags %}
 {% load static %}
-
 <!DOCTYPE html>
-<html lang="fr">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration</title>
-    {% tailwind_css %}
+    <title>Register - BAMK</title>
+    <link href="{% static 'theme/css/dist/styles.css' %}" rel="stylesheet">
 </head>
-
-<body class="bg-navy-100 min-h-screen flex justify-center items-center text-navy-900 font-sans">
-
-    <div class="container bg-white rounded-lg shadow-lg w-full max-w-md">
-        <form class="form px-6 py-8 space-y-4" method="post">
+<body class="bg-[#CEF1F9]">
+    <div class="max-w-md mx-auto mt-10 p-6 bg-white shadow-md rounded">
+        <h1 class="text-2xl font-bold text-[#03045F] mb-4">Register for BAMK</h1>
+        <form method="post">
             {% csrf_token %}
-            <h1 class="text-2xl font-semibold text-navy-800 text-center">Registration</h1>
-
-            <!-- Formulaire Django rendu avec Tailwind -->
             {{ form.as_p }}
-
-            <button type="submit"
-                class="w-full bg-navy-600 text-white font-medium py-3 rounded-lg hover:bg-navy-700 transition duration-200">
-                Sign Up
+            <button type="submit" class="w-full py-2 mt-4 bg-[#0078B8] text-white rounded hover:bg-[#00B6DA]">
+                Register
             </button>
         </form>
+        <p class="mt-4 text-sm text-gray-600">
+            Already have an account? <a href="{% url 'login' %}" class="text-[#0078B8]">Login here</a>
+        </p>
     </div>
-
 </body>
-
 </html>

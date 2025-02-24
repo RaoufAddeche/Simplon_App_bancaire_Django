@@ -1,41 +1,41 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import get_user_model, login, authenticate, logout
+from django.shortcuts import redirect
+from django.views.generic import TemplateView, FormView
+from django.contrib.auth.views import LoginView as AuthLoginView
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib import messages
-from django.views.generic import CreateView, TemplateView, UpdateView, ListView
-from .forms import UserCreationForm
-from .models import User
-
+from django.contrib.auth import login
+from .forms import RegistrationForm
 
 class HomeView(TemplateView):
     template_name = 'home.html'
 
-class RegisterView(CreateView):
-    model = get_user_model()
-    form_class = UserCreationForm
+class UserRegistrationView(FormView):
     template_name = 'register.html'
-    success_url = reverse_lazy('client')
+    form_class = RegistrationForm
+    success_url = reverse_lazy('home')  # Fallback redirection
 
-class LoginView(TemplateView):
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        # Redirect based on user role:
+        # If the user is marked as staff, assume they are an advisor.
+        if user.is_staff:
+            return redirect('advisor_dashboard')
+        else:
+            return redirect('client_dashboard')
+
+class UserLoginView(AuthLoginView):
     template_name = 'login.html'
 
-    def post(self, request):
-        """Handles POST requests for login, authenticates user."""
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
+    def get_success_url(self):
+        user = self.request.user
+        # Redirect: advisors go to advisor dashboard, others to client dashboard.
+        if user.is_staff:
+            return reverse_lazy('advisor_dashboard')
+        else:
+            return reverse_lazy('client_dashboard')
 
-        if user:
-            login(request, user)
-            redirect_url = 'advisor' if user.is_staff else 'client'
-            return redirect(redirect_url)
-        
-        messages.error(request, "Incorrect username or password")
-        return redirect('client')
-
-class ClientView(LoginRequiredMixin, TemplateView):
+class ClientDashboardView(TemplateView):
     template_name = 'client.html'
 
-class AdvisorView(LoginRequiredMixin, TemplateView):
+class AdvisorDashboardView(TemplateView):
     template_name = 'advisor.html'

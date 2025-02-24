@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil du Chat</title>
+</head>
+<body>
+    <h2>Bienvenue sur le Chat !</h2>
+    <p>Choisissez un salon en entrant un nom :</p>
+    <form action="{% url 'chat_room' room_name='general' %}" method="get">
+        <input type="text" name="room_name" placeholder="Nom du salon" required>
+        <button type="submit">Entrer</button>
+    </form>
+</body>
+</html>

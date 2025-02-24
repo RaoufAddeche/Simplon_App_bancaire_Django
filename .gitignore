@@ -169,3 +169,7 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Ignore Django migrations
+*/migrations/*
+!*/migrations/__init__.py

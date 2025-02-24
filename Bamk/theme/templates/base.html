@@ -1,0 +1,31 @@
+{% load static tailwind_tags %}
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BAMK{% endblock %}</title>
+    {% tailwind_css %}
+</head>
+<body class="bg-navy-100 text-navy-900">
+    <header class="bg-navy-600 py-0">
+        <div class="container mx-auto flex justify-end">
+            {% comment %} <div class="logo">
+                <img src="{% static 'images/logo.png' %}" alt="Logo BAM" class="h-50 md:h-40">
+            </div> {% endcomment %}
+        </div>        
+    </header>
+
+    <main class="py-0">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+	<footer class="text-center text-xs text-gray-500 py-4">
+		<p>&copy; 2025 BAMK, Bankers, Analysts, and Money Kinetics</p>
+
+	</footer>
+</body>
+</html>

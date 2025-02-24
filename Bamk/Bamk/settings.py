@@ -27,10 +27,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Custom user model
+# AUTH_USER_MODEL = 'user.User'
 
 # Application definition
 
 INSTALLED_APPS = [
+<<<<<<< HEAD
     #MyApp
     'Bamk',
     'loan',  
@@ -38,6 +41,14 @@ INSTALLED_APPS = [
     'news',
     'chat',
     'channels',
+=======
+    #My apps
+    'Bamk',
+    'loan',
+    'user',
+    'news',
+    'chat',
+>>>>>>> Khadija
 
     #Django apps
     'django.contrib.admin',
@@ -46,6 +57,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    #tailwind
+    'tailwind',
+    'theme',
+    'django_browser_reload',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +69,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -63,7 +80,7 @@ ROOT_URLCONF = 'Bamk.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -131,6 +148,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+<<<<<<< HEAD
 
 CHANNEL_LAYERS = {
     "default": {
@@ -139,3 +157,15 @@ CHANNEL_LAYERS = {
         # 'CONFIG': {"hosts": [("127.0.0.1", 6379)]},  # Si Redis est utilisé
     },
 }
+=======
+# Tailwind CSS settings
+TAILWIND_APP_NAME = 'theme'
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+STATICFILES_DIRS = [
+    BASE_DIR / "theme/static",
+]
+>>>>>>> Khadija

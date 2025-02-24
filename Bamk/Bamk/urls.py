@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+<<<<<<< HEAD
 from django.contrib import admin
 from django.urls import path, include
 
@@ -21,4 +22,30 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('chat/', include('chat.urls')),
     
+=======
+from django.urls import path
+from user.views import (
+    HomeView,
+    UserRegistrationView,
+    UserLoginView,
+    ClientDashboardView,
+    AdvisorDashboardView
+)
+from django.conf import settings
+from django.urls import include
+
+
+urlpatterns = [
+    path('', HomeView.as_view(), name='home'),
+    path('register/', UserRegistrationView.as_view(), name='register'),
+    path('login/', UserLoginView.as_view(), name='login'),
+    path('client/', ClientDashboardView.as_view(), name='client_dashboard'),
+    path('advisor/', AdvisorDashboardView.as_view(), name='advisor_dashboard'),
+>>>>>>> Khadija
 ]
+
+if settings.DEBUG:
+    urlpatterns += [
+        path("__reload__/", include("django_browser_reload.urls")),
+    ]
+    

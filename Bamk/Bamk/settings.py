@@ -33,7 +33,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-<<<<<<< HEAD
     #MyApp
     'Bamk',
     'loan',  
@@ -41,14 +40,6 @@ INSTALLED_APPS = [
     'news',
     'chat',
     'channels',
-=======
-    #My apps
-    'Bamk',
-    'loan',
-    'user',
-    'news',
-    'chat',
->>>>>>> Khadija
 
     #Django apps
     'django.contrib.admin',
@@ -148,7 +139,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-<<<<<<< HEAD
 
 CHANNEL_LAYERS = {
     "default": {
@@ -157,15 +147,3 @@ CHANNEL_LAYERS = {
         # 'CONFIG': {"hosts": [("127.0.0.1", 6379)]},  # Si Redis est utilisé
     },
 }
-=======
-# Tailwind CSS settings
-TAILWIND_APP_NAME = 'theme'
-
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
-
-STATICFILES_DIRS = [
-    BASE_DIR / "theme/static",
-]
->>>>>>> Khadija

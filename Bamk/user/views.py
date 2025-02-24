@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-from django.shortcuts import render
-
-# Create your views here.
-=======
 from django.shortcuts import redirect
 from django.views.generic import TemplateView, FormView
 from django.contrib.auth.views import LoginView as AuthLoginView
@@ -35,7 +30,7 @@ class UserLoginView(AuthLoginView):
         user = self.request.user
         # Redirect: advisors go to advisor dashboard, others to client dashboard.
         if user.is_staff:
-            return reverse_lazy('advisor_dashboard')
+            return reverse_lazy('chat')
         else:
             return reverse_lazy('client_dashboard')
 
@@ -44,4 +39,3 @@ class ClientDashboardView(TemplateView):
 
 class AdvisorDashboardView(TemplateView):
     template_name = 'advisor.html'
->>>>>>> Khadija

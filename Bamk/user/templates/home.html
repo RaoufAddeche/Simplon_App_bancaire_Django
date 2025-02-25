@@ -1,22 +1,57 @@
-{% load static %}
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Welcome to BAMK</title>
-    <link href="{% static 'theme/css/dist/styles.css' %}" rel="stylesheet">
-</head>
-<body class="bg-[#CEF1F9]">
-    <header class="bg-[#03045F] text-white p-4">
-        <h1 class="text-xl font-bold">BAMK - Bankers, Analysts, and Money Kinetics</h1>
-    </header>
-    <main class="container mx-auto p-4">
-        <h2 class="text-2xl font-bold text-[#0078B8]">Welcome to BAMK</h2>
-        <p class="mt-2">Your trusted partner in financial solutions.</p>
-    </main>
-    <footer class="bg-[#03045F] text-white p-4 text-center">
-        © 2025 BAMK. All rights reserved.
-    </footer>
-</body>
-</html>
+{% load static %}
+{% block title %}Welcome to BAMK{% endblock %}
+
+{% block content %}
+<section class="relative bg-paleblue">
+    <!-- Hero Section -->
+    <div class="container mx-auto flex flex-col md:flex-row items-center justify-between py-20 px-6 md:px-12">
+        <!-- Left Text Section -->
+        <div class="md:w-1/2 text-center md:text-left">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-navy leading-tight">
+                Your Trusted Financial Partner
+            </h1>
+            <p class="mt-4 text-gray-700 text-lg">
+                Secure your future with BAMK. Apply for loans, manage finances, and connect with advisors effortlessly.
+            </p>
+            <a href="{% url 'register' %}" class="mt-6 inline-block bg-deepblue text-white px-6 py-3 rounded-lg shadow-lg text-lg font-semibold hover:bg-skyblue transition duration-300">
+                Get Started
+            </a>
+        </div>
+
+        <!-- Right Image Section -->
+        <div class="md:w-1/2 mt-10 md:mt-0">
+            <img src="{% static 'images/bank_hero.jpg' %}" alt="Banking illustration" class="w-full max-w-lg mx-auto">
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="container mx-auto py-16 px-6">
+    <h2 class="text-3xl font-bold text-center text-navy">Why Choose BAMK?</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10">
+        <div class="p-6 bg-white rounded-lg shadow-md text-center">
+            <h3 class="text-xl font-semibold text-deepblue">Fast Loan Approval</h3>
+            <p class="text-gray-600 mt-2">Get your loan approved in minutes with our AI-powered system.</p>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow-md text-center">
+            <h3 class="text-xl font-semibold text-deepblue">Expert Advisors</h3>
+            <p class="text-gray-600 mt-2">Our professionals are ready to guide you towards financial success.</p>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow-md text-center">
+            <h3 class="text-xl font-semibold text-deepblue">Secure Transactions</h3>
+            <p class="text-gray-600 mt-2">We prioritize your security with encrypted data processing.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="bg-navy text-white py-12 text-center">
+    <h2 class="text-2xl font-bold">Join BAMK Today</h2>
+    <p class="mt-2 text-lightblue">Take control of your finances with our expert banking solutions.</p>
+    <a href="{% url 'register' %}" class="mt-4 inline-block bg-lightblue text-navy px-6 py-3 rounded-lg shadow-lg text-lg font-semibold hover:bg-skyblue transition duration-300">
+        Sign Up Now
+    </a>
+</section>
+{% endblock %}

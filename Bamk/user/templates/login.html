@@ -1,24 +1,22 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login - BAMK</title>
-    <link href="{% static 'theme/css/dist/styles.css' %}" rel="stylesheet">
-</head>
-<body class="bg-[#CEF1F9]">
-    <div class="max-w-md mx-auto mt-10 p-6 bg-white shadow-md rounded">
-        <h1 class="text-2xl font-bold text-[#03045F] mb-4">Login to BAMK</h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="w-full py-2 mt-4 bg-[#0078B8] text-white rounded hover:bg-[#00B6DA]">
-                Login
-            </button>
-        </form>
-        <p class="mt-4 text-sm text-gray-600">
-            Don't have an account? <a href="{% url 'register' %}" class="text-[#0078B8]">Register here</a>
-        </p>
-    </div>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Login - BAMK{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg mt-10">
+    <h2 class="text-2xl font-bold text-deepblue mb-4 text-center">
+        Login to Your Account
+    </h2>    
+    <form method="post">
+        {% csrf_token %}
+        <label class="block mb-2 text-white">Username</label>
+        <input type="text" name="username" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-skyblue">
+        
+        <label class="block mt-4 mb-2 text-white">Password</label>
+        <input type="password" name="password" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-skyblue">
+
+        <button type="submit" class="w-full mt-6 bg-deepblue text-white py-2 rounded-lg hover:bg-skyblue">
+            Login
+        </button>
+    </form>
+</div>
+{% endblock %}

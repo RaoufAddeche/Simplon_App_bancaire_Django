@@ -1,24 +1,19 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Register - BAMK</title>
-    <link href="{% static 'theme/css/dist/styles.css' %}" rel="stylesheet">
-</head>
-<body class="bg-[#CEF1F9]">
-    <div class="max-w-md mx-auto mt-10 p-6 bg-white shadow-md rounded">
-        <h1 class="text-2xl font-bold text-[#03045F] mb-4">Register for BAMK</h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="w-full py-2 mt-4 bg-[#0078B8] text-white rounded hover:bg-[#00B6DA]">
-                Register
-            </button>
-        </form>
-        <p class="mt-4 text-sm text-gray-600">
-            Already have an account? <a href="{% url 'login' %}" class="text-[#0078B8]">Login here</a>
-        </p>
-    </div>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Register - BAMK{% endblock %}
+
+{% block content %}
+
+<div class="container bg-white rounded-lg shadow-lg w-full max-w-md mx-auto">
+    <form class="form px-6 py-8 space-y-4" method="post">
+        {% csrf_token %}
+        <h1 class="text-2xl font-bold text-deepblue mb-4 text-center">Create Your BAMK Account</h2>
+
+        <!-- Formulaire Django rendu avec Tailwind -->
+        {{ form.as_p }}
+
+        <button type="submit" class="w-full mt-6 bg-deepblue text-white py-2 rounded-lg hover:bg-skyblue">
+            Sign Up
+        </button>
+    </form>
+</div>
+{% endblock %}

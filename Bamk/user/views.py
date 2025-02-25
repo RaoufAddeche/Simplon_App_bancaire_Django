@@ -4,6 +4,7 @@ from django.contrib.auth.views import LoginView as AuthLoginView
 from django.urls import reverse_lazy
 from django.contrib.auth import login
 from .forms import RegistrationForm
+from django.shortcuts import redirect
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -30,7 +31,7 @@ class UserLoginView(AuthLoginView):
         user = self.request.user
         # Redirect: advisors go to advisor dashboard, others to client dashboard.
         if user.is_staff:
-            return reverse_lazy('create_news')
+            return reverse_lazy('advisor_dashboard')
         else:
             return reverse_lazy('client_dashboard')
 
@@ -39,3 +40,6 @@ class ClientDashboardView(TemplateView):
 
 class AdvisorDashboardView(TemplateView):
     template_name = 'advisor.html'
+
+def go_to_chat(request):
+    return redirect("chat")  

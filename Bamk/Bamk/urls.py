@@ -25,11 +25,12 @@ from user.views import (
     )
 
 from django.conf import settings
-from django.urls import include
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('chat/', include('chat.urls')),
+    path('news/', include('news.urls')),
     path('', HomeView.as_view(), name='home'),
     path('register/', UserRegistrationView.as_view(), name='register'),
     path('login/', UserLoginView.as_view(), name='login'),

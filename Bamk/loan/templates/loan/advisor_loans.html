@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Gestion des demandes de prêt</h2>
+    
+    {% if messages %}
+    <div class="messages mb-4">
+        {% for message in messages %}
+        <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <div class="card">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#all" data-bs-toggle="tab">Toutes les demandes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#approved" data-bs-toggle="tab">Approuvées</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#rejected" data-bs-toggle="tab">Rejetées</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="all">
+                    {% if loans %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Utilisateur</th>
+                                    <th>Montant</th>
+                                    <th>Statut</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for loan in loans %}
+                                <tr>
+                                    <td>{{ loan.id }}</td>
+                                    <td>{{ loan.user_id }}</td>
+                                    <td>{{ loan.amount }} $</td>
+                                    <td>
+                                        {% if loan.status == 'approved' %}
+                                        <span class="badge bg-success">Approuvé</span>
+                                        {% elif loan.status == 'rejected' %}
+                                        <span class="badge bg-danger">Rejeté</span>
+                                        {% else %}
+                                        <span class="badge bg-warning text-dark">En attente</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ loan.created_at }}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info">Détails</button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info">
+                        Aucune demande de prêt pour le moment.
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Autres onglets avec filtres similaires -->
+                <div class="tab-pane fade" id="approved">
+                    <!-- Contenu filtré pour les demandes approuvées -->
+                </div>
+                
+                <div class="tab-pane fade" id="rejected">
+                    <!-- Contenu filtré pour les demandes rejetées -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

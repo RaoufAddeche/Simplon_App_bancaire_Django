@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card text-center">
+        <div class="card-header bg-success text-white">
+            <h3>Félicitations !</h3>
+        </div>
+        <div class="card-body">
+            <img src="https://cdn.pixabay.com/photo/2017/01/13/01/22/ok-1976099_1280.png" alt="Approuvé" style="max-width: 150px;">
+            <h4 class="mt-3">Votre demande de prêt a été approuvée !</h4>
+            <p class="lead">Nos conseillers vont vous contacter prochainement pour finaliser votre dossier.</p>
+            <div class="mt-4">
+                <a href="{% url 'user_loans' %}" class="btn btn-primary">Voir mon historique</a>
+                <a href="{% url 'loan_request' %}" class="btn btn-outline-success">Nouvelle demande</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

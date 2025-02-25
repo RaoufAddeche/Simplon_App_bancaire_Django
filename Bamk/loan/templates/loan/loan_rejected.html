@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card text-center">
+        <div class="card-header bg-danger text-white">
+            <h3>Nous sommes désolés</h3>
+        </div>
+        <div class="card-body">
+            <img src="https://cdn.pixabay.com/photo/2012/04/12/20/12/x-30465_1280.png" alt="Rejeté" style="max-width: 150px;">
+            <h4 class="mt-3">Votre demande de prêt n'a pas été approuvée</h4>
+            <p class="lead">D'après notre analyse, nous ne pouvons pas approuver votre demande actuellement.</p>
+            <p>Voici quelques raisons possibles:</p>
+            <ul class="list-group mb-3">
+                <li class="list-group-item">Le montant demandé est trop élevé par rapport à votre situation</li>
+                <li class="list-group-item">Le secteur d'activité présente un risque trop important</li>
+                <li class="list-group-item">La durée du prêt est trop longue</li>
+            </ul>
+            <div class="mt-4">
+                <a href="{% url 'user_loans' %}" class="btn btn-primary">Voir mon historique</a>
+                <a href="{% url 'loan_request' %}" class="btn btn-outline-secondary">Faire une nouvelle demande</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,22 +1,41 @@
+# User/services.py
 import requests
+from django.conf import settings
 
+class AuthService:
+    """Service pour communiquer avec l'API d'authentification"""
 
-
-class FastAPIClient:
-    """classe pour interagir avec FastAPI"""
-    def __init__(self,base_url):
-        self.base_url = base_url
-    
-    def create_loan_request(self, token, amount):
-        """Crée une demande de prêt via FASTAPI"""
-        url = f"{self.base_url}/loans/request"
-        headers = {"Authorization": f"Bearer{token}"}
-        data = {"amount": amount}
-        
+    def login(self, email, password):
+        """Connecte un utilisateur via l'API"""
         try:
-            response = requests.post(url, headers = headers, json=data)
-            response.raise_for_status()
-            return response.json()
-        except requests.exceptions.RequestException as e:
-            print(f"erreur lors de l'appel à FASTAPI: {e}")
-            return None
+            # Envoie une requête POST à l'API
+            response = requests.post(
+                f"{settings.FASTAPI_BASE_URL}/auth/login",
+                json={"email": email, "password": password}
+            )
+
+            # Si la connexion réussit
+            if response.status_code == 200:
+                return response.json()  # Retourne le token JWT
+
+            # Si le compte n'est pas activé
+            elif response.status_code == 403:
+                return {"error": "not_activated"}
+
+            # Autres erreurs
+            else:
+                return {"error": "login_failed"}
+
+        except Exception as e:
+            return {"error": "api_error", "message": str(e)}
+
+    def activate_account(self, email, new_password):
+        """Active un compte utilisateur"""
+        try:
+            response = requests.post(
+                f"{settings.FASTAPI_BASE_URL}/auth/activation",
+                json={"email": email, "new_password": new_password}
+            )
+            return response.status_code == 200
+        except Exception:
+            return False

@@ -1,68 +1,62 @@
-from django.shortcuts import render ,redirect
-from .models import Loan
-from .forms import LoanRequestForm
-from user.services import FastAPIClient #classe pour interagir avec fastapi
+# Loan/views.py
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from .services import LoanService
+from .forms import LoanApplicationForm
 
-FASTAPI_BASE_URL = "http://127.0.0.1:8000/api"  # URL de base de l'API FastAPI
-
-@login_required
-def loan_request(request):
-    "Vue pour soumettre une demande de prêt"
-    if request.method == "POST":
-        form = LoanRequestForm(request.POST)
+@login_required  # Cette décoration assure que l'utilisateur est connecté
+def loan_request_view(request):
+    """Page de demande de prêt"""
+    if request.method == 'POST':
+        form = LoanApplicationForm(request.POST)
         if form.is_valid():
-            token = request.session.get("access_token")
-            if not token :
-                return render(request, "error.html", {"message": "Utilisateur non authentifié."})
-            
-            #Récuperer le montant du formulaire
-            amount = form.cleaned_data["amount"]
+            # Récupérer le token JWT
+            token = request.session.get('jwt_token')
+            if not token:
+                messages.error(request, "Session expirée. Reconnectez-vous.")
+                return redirect('login')
 
-            #Appeler fastapi pour créer une demande de prêt
-            client= FastAPIClient(base_url = FASTAPI_BASE_URL)
-            loan_data= client.create_loan_request(token, amount)
+            # Préparer les données du prêt
+            loan_data = form.cleaned_data
 
-            if not loan_data:
-                return render(request, "error.html", {"message": "Impossible de soumettre la demande de prêt."})
-            
-            #Enregistrer la demande localement
-            Loan.objects.create(
-                user=request.user,
-                amount=amount,
-                status=loan_data.get("status","pending")
-            )
+            # Envoyer la demande
+            loan_service = LoanService(token)
+            result = loan_service.submit_loan_request(loan_data)
 
-            #Si le prêt est refusé, affiche une notif immédiatement
-            if loan_data.get("status") == "rejected":
-                return render(request, "loan/loan_rejected.html", {"loan": loan_data})
-            
-            #si le prêt est accepté, rediriger vers un conseiller
-            if loan_data.get("status") == "approved":
-                return render(request, "loan/loan_approved.html", {"loan":loan_data})
-            
+            # Traiter le résultat
+            if 'error' not in result:
+                if result.get('eligible', False):
+                    return redirect('loan_approved')
+                else:
+                    return redirect('loan_rejected')
+            else:
+                messages.error(request, "Erreur lors de la demande")
     else:
-        form = LoanRequestForm()
-    return render(request, "loan/loan_request.html", {"form": form})
+        form = LoanApplicationForm()
 
-
-
+    return render(request, 'loan/loan_request.html', {'form': form})
 
 @login_required
-def user_loans(request):
-    """
-    Vue pour afficher l'historique des prêts d'un utilisateur.
-    """
-    loans = Loan.objects.filter(user=request.user).order_by("-created_at")
-    return render(request, "loan/user_loan.html", {"loans": loans})
+def user_loans_view(request):
+    """Page d'historique des prêts"""
+    token = request.session.get('jwt_token')
+    if not token:
+        messages.error(request, "Session expirée. Reconnectez-vous.")
+        return redirect('login')
+
+    # Récupérer l'historique
+    loan_service = LoanService(token)
+    loans = loan_service.get_loan_history()
+
+    return render(request, 'loan/user_loans.html', {'loans': loans})
 
 @login_required
-def advisor_loans(request):
-    """
-    Vue pour afficher les prêts assignés à un conseiller.
-    """
-    if not request.user.is_staff:  # Vérifier si l'utilisateur est un conseiller
-        return render(request, "error.html", {"message": "Accès non autorisé."})
+def loan_approved_view(request):
+    """Page de prêt approuvé"""
+    return render(request, 'loan/loan_approved.html')
 
-    loans = Loan.objects.filter(assigned_to=request.user).order_by("-created_at")
-    return render(request, "loan/advisor_loan.html", {"loans": loans})
+@login_required
+def loan_rejected_view(request):
+    """Page de prêt rejeté"""
+    return render(request, 'loan/loan_rejected.html')

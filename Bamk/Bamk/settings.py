@@ -33,12 +33,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    #My apps
+    #MyApp
     'Bamk',
-    'loan',
+    'loan',  
     'user',
     'news',
     'chat',
+    'channels',
 
     #Django apps
     'django.contrib.admin',
@@ -84,8 +85,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'Bamk.wsgi.application'
-
+#WSGI_APPLICATION = 'Bamk.wsgi.application'
+ASGI_APPLICATION = 'Bamk.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -147,3 +148,11 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",# Pour le développement local
+        # 'BACKEND': 'channels_redis.core.RedisChannelLayer',  # Utiliser Redis en prod
+        # 'CONFIG': {"hosts": [("127.0.0.1", 6379)]},  # Si Redis est utilisé
+    },
+}

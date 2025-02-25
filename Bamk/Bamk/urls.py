@@ -22,8 +22,7 @@ from user.views import (
     ClientDashboardView,
     AdvisorDashboardView
 )
-from django.conf import settings
-from django.urls import include
+from django.urls import include, path
 
 
 urlpatterns = [
@@ -32,10 +31,5 @@ urlpatterns = [
     path('login/', UserLoginView.as_view(), name='login'),
     path('client/', ClientDashboardView.as_view(), name='client_dashboard'),
     path('advisor/', AdvisorDashboardView.as_view(), name='advisor_dashboard'),
+    path("__reload__/", include("django_browser_reload.urls")),
 ]
-
-if settings.DEBUG:
-    urlpatterns += [
-        path("__reload__/", include("django_browser_reload.urls")),
-    ]
-    

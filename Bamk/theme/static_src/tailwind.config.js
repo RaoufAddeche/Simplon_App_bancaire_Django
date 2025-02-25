@@ -44,11 +44,11 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                'navy': '#03045F',
-                'bleu': '#0078B8',
-                'cyan': '#00B6DA',
-                'bleu-clair': '#93E1F0',
-                'bleu-très-clair': '#CEF1F9',
+                navy: "#03045F",
+                deepblue: "#0078B8",
+                skyblue: "#00B6DA",
+                lightblue: "#93E1F0",
+                paleblue: "#CEF1F9"
               },
         },
     },

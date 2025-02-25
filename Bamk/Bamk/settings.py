@@ -27,10 +27,20 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Custom user model
+# AUTH_USER_MODEL = 'user.User'
 
 # Application definition
 
 INSTALLED_APPS = [
+    #My apps
+    'Bamk',
+    'loan',
+    'user',
+    'news',
+    'chat',
+
+    #Django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,6 +49,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'loan',
     'user',
+
+    #tailwind
+    'tailwind',
+    'theme',
+    'django_browser_reload',
+
 ]
 
 MIDDLEWARE = [
@@ -50,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'user.middleware.JWTAuthMiddleware',
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 ROOT_URLCONF = 'Bamk.urls'
@@ -120,9 +137,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Tailwind CSS settings
+
+TAILWIND_APP_NAME = 'theme'
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+

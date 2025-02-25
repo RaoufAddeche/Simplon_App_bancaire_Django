@@ -1,60 +1,41 @@
-# User/views.py
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .services import AuthService
+from django.shortcuts import redirect
+from django.views.generic import TemplateView, FormView
+from django.contrib.auth.views import LoginView as AuthLoginView
+from django.urls import reverse_lazy
+from django.contrib.auth import login
+from .forms import RegistrationForm
 
-def login_view(request):
-    """Page de connexion"""
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+class HomeView(TemplateView):
+    template_name = 'home.html'
 
-        # Utiliser le service d'authentification
-        auth_service = AuthService()
-        result = auth_service.login(email, password)
+class UserRegistrationView(FormView):
+    template_name = 'register.html'
+    form_class = RegistrationForm
+    success_url = reverse_lazy('home')  # Fallback redirection
 
-        # Si connexion réussie
-        if 'access_token' in result:
-            # Stocker le token dans la session
-            request.session['jwt_token'] = result['access_token']
-            messages.success(request, "Vous êtes connecté!")
-            return redirect('user_loans')  # Rediriger vers la page d'historique
-
-        # Si compte non activé
-        elif result.get('error') == 'not_activated':
-            messages.warning(request, "Votre compte n'est pas activé")
-            return redirect('activate_account', email=email)
-
-        # Autres erreurs
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        # Redirect based on user role:
+        # If the user is marked as staff, assume they are an advisor.
+        if user.is_staff:
+            return redirect('advisor_dashboard')
         else:
-            messages.error(request, "Identifiants invalides")
+            return redirect('client_dashboard')
 
-    return render(request, 'user/login.html')
+class UserLoginView(AuthLoginView):
+    template_name = 'login.html'
 
-def activate_account_view(request, email):
-    """Page d'activation de compte"""
-    if request.method == 'POST':
-        new_password = request.POST.get('new_password')
-        confirm_password = request.POST.get('confirm_password')
-
-        # Vérifier que les mots de passe correspondent
-        if new_password != confirm_password:
-            messages.error(request, "Les mots de passe ne correspondent pas")
-            return render(request, 'user/activate.html', {'email': email})
-
-        # Activer le compte
-        auth_service = AuthService()
-        if auth_service.activate_account(email, new_password):
-            messages.success(request, "Compte activé avec succès!")
-            return redirect('login')
+    def get_success_url(self):
+        user = self.request.user
+        # Redirect: advisors go to advisor dashboard, others to client dashboard.
+        if user.is_staff:
+            return reverse_lazy('advisor_dashboard')
         else:
-            messages.error(request, "Échec de l'activation")
+            return reverse_lazy('client_dashboard')
 
-    return render(request, 'user/activate.html', {'email': email})
+class ClientDashboardView(TemplateView):
+    template_name = 'client.html'
 
-def logout_view(request):
-    """Vue de déconnexion"""
-    if 'jwt_token' in request.session:
-        del request.session['jwt_token']
-    messages.success(request, "Vous avez été déconnecté avec succès")
-    return redirect('login')
+class AdvisorDashboardView(TemplateView):
+    template_name = 'advisor.html'

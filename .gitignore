@@ -173,6 +173,7 @@ cython_debug/
 # Ignore Django migrations
 */migrations/*
 !*/migrations/__init__.py
+/migrations/*.pyc
 #apple files
 
 .DS_Store

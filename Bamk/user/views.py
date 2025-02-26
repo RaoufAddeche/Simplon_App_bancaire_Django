@@ -41,5 +41,3 @@ class ClientDashboardView(TemplateView):
 class AdvisorDashboardView(TemplateView):
     template_name = 'advisor.html'
 
-def go_to_chat(request):
-    return redirect("chat")  

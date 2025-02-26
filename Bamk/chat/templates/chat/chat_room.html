@@ -1,35 +1,61 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Chat Room</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
     <h2>Chat Room</h2>
-    <div id="chat-box">
+    <ul id="chat-log">
         {% for message in messages %}
-            <p><strong>{{ message.user.username }}:</strong> {{ message.content }}</p>
+            <li><strong>{{ message.sender.username|default:"Anonyme" }}</strong>: {{ message.content }}</li>
         {% endfor %}
-    </div>
+    </ul>
 
-    <input id="message-input" type="text" placeholder="Écrire un message...">
+    <input id="message-input" type="text" placeholder="Écrire un message..." autocomplete="off">
     <button id="send-button">Envoyer</button>
 
     <script>
+        // Création du WebSocket
         const chatSocket = new WebSocket("ws://" + window.location.host + "/ws/chat/");
 
-        chatSocket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
-            document.getElementById("chat-box").innerHTML += "<p><strong>" + data.username + ":</strong> " + data.message + "</p>";
+        // Écoute des nouveaux messages
+        chatSocket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+
+            // Crée un nouvel élément pour afficher le message
+            const chatLog = document.getElementById("chat-log");
+            const newMessage = document.createElement("li");
+            newMessage.innerHTML = `<strong>${data.username}</strong>: ${data.message}`;
+
+            // Ajoute le message en bas de la liste
+            chatLog.appendChild(newMessage);
         };
 
-        document.getElementById("send-button").onclick = function() {
-            const messageInput = document.getElementById("message-input");
-            chatSocket.send(JSON.stringify({
-                "message": messageInput.value,
-                "username": "{{ user.username }}"
-            }));
-            messageInput.value = "";
+        chatSocket.onclose = function(event) {
+            console.error("Le WebSocket s’est fermé de manière inattendue.");
         };
-    </script>
-</body>
-</html>
+
+        // Fonction pour envoyer un message
+        function sendMessage() {
+            const messageInput = document.getElementById("message-input");
+            const message = messageInput.value.trim();
+            const username = "{{ request.user.username }}";  // Récupère le nom de l'utilisateur
+
+            if (message !== "") {
+                chatSocket.send(JSON.stringify({
+                    "message": message,
+                    "username": username
+                }));
+                messageInput.value = "";  // Efface le champ de saisie
+            }
+        }
+
+        // Envoi du message au clic du bouton
+        document.getElementById("send-button").onclick = sendMessage;
+
+        // Envoi du message avec "Enter"
+        document.getElementById("message-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+    </script> 
+    
+{% endblock %}

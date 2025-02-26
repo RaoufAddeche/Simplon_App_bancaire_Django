@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% block content %}
     <h1>Liste des articles</h1>
     {% for article in news %}
         <div>
@@ -14,3 +14,4 @@
     {% empty %}
         <p>Aucun article disponible.</p>
     {% endfor %}
+{% endblock %}

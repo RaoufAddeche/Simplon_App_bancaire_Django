@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Liste des articles</h1>
+    {% for article in news %}
+        <div>
+            <h2>{{ article.title }}</h2>
+            <p>Écrit par {{ article.created_by }} le {{ article.created_at|date:"d/m/Y" }}</p>
+            <p>{{ article.content|truncatewords:20 }}</p>
+            {% if article.image %}
+                <img src="{{ article.image.url }}" alt="Illustration" style="max-width: 300px;">
+            {% endif %}
+            <hr>
+        </div>
+    {% empty %}
+        <p>Aucun article disponible.</p>
+    {% endfor %}
+{% endblock %}

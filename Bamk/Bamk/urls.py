@@ -19,11 +19,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.urls import include, path
 from django.views.generic import RedirectView
+from django.urls import include, path
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('user.urls')),
-    path('loans/', include('loan.urls')),
-    path('chat/', include(('chat.urls', 'chat'), namespace='chat')),
+    path('chat/', include('chat.urls')),
+    path('news/', include('news.urls')),
     path('', RedirectView.as_view(url='home')),
 ]

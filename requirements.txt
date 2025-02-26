@@ -34,3 +34,4 @@ channels==4.2.0
 Django==5.1.6
 channels_redis==4.2.1
 redis==5.2.1
+pillow==11.1.0

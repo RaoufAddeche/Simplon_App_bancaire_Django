@@ -1,9 +1,8 @@
 # loan/forms.py
 from django import forms
 
-class LoanApplicationForm(forms.Form):
-    """Formulaire de demande de prêt"""
-
+class LoanRequestForm(forms.Form):
+    """Formulaire pour soumettre une demande de prêt"""
     State = forms.CharField(
         label="État",
         max_length=50,

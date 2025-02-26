@@ -1,39 +1,72 @@
-# Loan/services.py
+# loan/services.py
 import requests
 from django.conf import settings
 
-class LoanService:
-    """Service pour communiquer avec l'API de prêts"""
+class LoanAPIService:
+    """Service pour communiquer avec l'API FastAPI pour les prêts"""
 
-    def __init__(self, token):
-        self.token = token
-        self.headers = {"Authorization": f"Bearer {token}"}
+    @staticmethod
+    def get_jwt_token(request):
+        """Récupère le token JWT de la session utilisateur"""
+        return request.session.get('jwt_token')
 
-    def get_loan_history(self):
+    @staticmethod
+    def get_loan_history(request):
         """Récupère l'historique des prêts de l'utilisateur"""
+        token = LoanAPIService.get_jwt_token(request)
+        if not token:
+            return {"error": "authentication_error"}
+
         try:
+            headers = {"Authorization": f"Bearer {token}"}
             response = requests.get(
                 f"{settings.FASTAPI_BASE_URL}/loans/history",
-                headers=self.headers
+                headers=headers
             )
 
             if response.status_code == 200:
                 return response.json()
-            return []
-        except Exception:
-            return []
+            return {"error": "api_error", "status": response.status_code}
+        except Exception as e:
+            return {"error": "connection_error", "message": str(e)}
 
-    def submit_loan_request(self, loan_data):
-        """Envoie une demande de prêt à l'API"""
+    @staticmethod
+    def submit_loan_request(request, loan_data):
+        """Soumet une demande de prêt à l'API"""
+        token = LoanAPIService.get_jwt_token(request)
+        if not token:
+            return {"error": "authentication_error"}
+
         try:
+            headers = {"Authorization": f"Bearer {token}"}
             response = requests.post(
                 f"{settings.FASTAPI_BASE_URL}/loans/request",
-                headers=self.headers,
+                headers=headers,
                 json=loan_data
             )
 
             if response.status_code == 200:
                 return response.json()
-            return {"error": "submission_failed"}
+            return {"error": "api_error", "status": response.status_code}
         except Exception as e:
-            return {"error": "api_error", "message": str(e)}
+            return {"error": "connection_error", "message": str(e)}
+
+    @staticmethod
+    def get_advisor_loans(request):
+        """Récupère les prêts des clients pour un conseiller"""
+        token = LoanAPIService.get_jwt_token(request)
+        if not token:
+            return {"error": "authentication_error"}
+
+        try:
+            headers = {"Authorization": f"Bearer {token}"}
+            response = requests.get(
+                f"{settings.FASTAPI_BASE_URL}/loans/advisor",
+                headers=headers
+            )
+
+            if response.status_code == 200:
+                return response.json()
+            return {"error": "api_error", "status": response.status_code}
+        except Exception as e:
+            return {"error": "connection_error", "message": str(e)}

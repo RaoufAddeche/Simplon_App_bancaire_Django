@@ -1,62 +1,85 @@
-
+# loan/views.py
 from django.shortcuts import render, redirect
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .services import LoanService
-from .forms import LoanApplicationForm
+from django.contrib import messages
+from django.views import View
+from django.utils.decorators import method_decorator
+from .forms import LoanRequestForm
+from .services import LoanAPIService
 
-@login_required  # Cette décoration assure que l'utilisateur est connecté
-def loan_request_view(request):
-    """Page de demande de prêt"""
-    if request.method == 'POST':
-        form = LoanApplicationForm(request.POST)
+@method_decorator(login_required, name='dispatch')
+class LoanRequestView(View):
+    """Vue pour soumettre une demande de prêt"""
+    def get(self, request):
+        form = LoanRequestForm()
+        return render(request, "loan/loan_request.html", {"form": form})
+
+    def post(self, request):
+        form = LoanRequestForm(request.POST)
         if form.is_valid():
-            # Récupérer le token JWT
-            token = request.session.get('jwt_token')
-            if not token:
-                messages.error(request, "Session expirée. Reconnectez-vous.")
-                return redirect('login')
+            # Soumettre à l'API FastAPI
+            result = LoanAPIService.submit_loan_request(request, form.cleaned_data)
 
-            # Préparer les données du prêt
-            loan_data = form.cleaned_data
-
-            # Envoyer la demande
-            loan_service = LoanService(token)
-            result = loan_service.submit_loan_request(loan_data)
-
-            # Traiter le résultat
-            if 'error' not in result:
-                if result.get('eligible', False):
-                    return redirect('loan_approved')
+            if "error" not in result:
+                # Vérifier la prédiction
+                if result.get("eligible", False):
+                    return redirect("loan_approved")
                 else:
-                    return redirect('loan_rejected')
+                    return redirect("loan_rejected")
             else:
-                messages.error(request, "Erreur lors de la demande")
-    else:
-        form = LoanApplicationForm()
+                error_msg = "Erreur lors de la soumission de la demande"
+                if result.get("error") == "authentication_error":
+                    error_msg = "Erreur d'authentification, veuillez vous reconnecter"
+                messages.error(request, error_msg)
 
-    return render(request, 'loan/loan_request.html', {'form': form})
+        return render(request, "loan/loan_request.html", {"form": form})
 
-@login_required
-def user_loans_view(request):
-    """Page d'historique des prêts"""
-    token = request.session.get('jwt_token')
-    if not token:
-        messages.error(request, "Session expirée. Reconnectez-vous.")
-        return redirect('login')
+@method_decorator(login_required, name='dispatch')
+class UserLoansView(View):
+    """Vue pour afficher l'historique des prêts"""
+    def get(self, request):
+        result = LoanAPIService.get_loan_history(request)
 
-    # Récupérer l'historique
-    loan_service = LoanService(token)
-    loans = loan_service.get_loan_history()
+        if "error" in result:
+            error_msg = "Impossible de récupérer l'historique des prêts"
+            if result.get("error") == "authentication_error":
+                error_msg = "Erreur d'authentification, veuillez vous reconnecter"
+            messages.error(request, error_msg)
+            loans = []
+        else:
+            loans = result
 
-    return render(request, 'loan/user_loans.html', {'loans': loans})
+        return render(request, "loan/user_loans.html", {"loans": loans})
 
-@login_required
-def loan_approved_view(request):
-    """Page de prêt approuvé"""
-    return render(request, 'loan/loan_approved.html')
+@method_decorator(login_required, name='dispatch')
+class LoanApprovedView(View):
+    """Vue pour afficher la page de prêt approuvé"""
+    def get(self, request):
+        return render(request, "loan/loan_approved.html")
 
-@login_required
-def loan_rejected_view(request):
-    """Page de prêt rejeté"""
-    return render(request, 'loan/loan_rejected.html')
+@method_decorator(login_required, name='dispatch')
+class LoanRejectedView(View):
+    """Vue pour afficher la page de prêt rejeté"""
+    def get(self, request):
+        return render(request, "loan/loan_rejected.html")
+
+@method_decorator(login_required, name='dispatch')
+class AdvisorLoansView(View):
+    """Vue pour les conseillers pour voir les prêts"""
+    def get(self, request):
+        if not request.user.is_staff:
+            messages.error(request, "Accès refusé")
+            return redirect("home")
+
+        result = LoanAPIService.get_advisor_loans(request)
+
+        if "error" in result:
+            error_msg = "Impossible de récupérer les prêts des clients"
+            if result.get("error") == "authentication_error":
+                error_msg = "Erreur d'authentification, veuillez vous reconnecter"
+            messages.error(request, error_msg)
+            client_loans = {}
+        else:
+            client_loans = result
+
+        return render(request, "loan/advisor_loans.html", {"client_loans": client_loans})

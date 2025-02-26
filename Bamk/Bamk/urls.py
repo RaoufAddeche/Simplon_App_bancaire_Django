@@ -26,5 +26,5 @@ urlpatterns = [
     path('loans/', include('loan.urls')),
 
     path('', RedirectView.as_view(url='home')),
-    path("__reload__/", include("django_browser_reload.urls")),
+    # path("__reload__/", include("django_browser_reload.urls")),
 ]

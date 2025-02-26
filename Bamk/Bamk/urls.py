@@ -23,6 +23,7 @@ urlpatterns = [
     path('', include('user.urls')),
     path('chat/', include('chat.urls')),
     path('news/', include('news.urls')),
+    path('loan/', include('loan.urls')),
     path('', RedirectView.as_view(url='home')),
     #path("__reload__/", include("django_browser_reload.urls")),
 ]

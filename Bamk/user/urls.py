@@ -11,6 +11,7 @@ from user.views import (
 from django.contrib.auth.views import LogoutView
 from django.urls import include, path
 
+app_name = 'user'
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),

@@ -23,7 +23,7 @@
                             <td class="px-6 py-4 text-center">{{ client.user.username }}</td>
                             <td class="px-6 py-4 text-center">{{ client.user.email }}</td>
                             <td class="px-6 py-4 text-center">
-                                <a href="{% url 'client_file' client.pk %}" class="text-blue-600 hover:underline">Client File</a>
+                                <a href="{% url 'user:client_file' client.pk %}" class="text-blue-600 hover:underline">Client File</a>
                             </td>
                         </tr>
                     {% endfor %}

@@ -8,98 +8,32 @@
     <aside class="w-64 bg-white p-6 shadow-lg">
         <h2 class="text-2xl font-bold text-deepblue">Tools</h2>
         <div class="mt-6">
-            <a href="#" class="block bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center">
+            <a href="{% url "news:create_news"%}" class="block bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center">
                 Write an article
             </a>
         </div>
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 max-w-4xl mx-auto p-6">
+    <main class="flex-max max-w-4xl mx-auto p-6">
         <div class="bg-white p-6 rounded-lg shadow-lg">
             <h2 class="text-3xl font-bold text-deepblue">Advisor Panel</h2>
             <p class="text-gray-600">Manage client loan requests and communications.</p>
 
             <div class="mt-6 grid grid-cols-2 gap-4">
-                <a href="{% url 'list_clients' %}" class="bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center">
+                <a href="{% url 'user:list_clients' %}" class="bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center">
                     List of Assigned Clients
                 </a>                
-                <a href="#" class="bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center">
+                <a href="{% url "chat:chat" %}" class="bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center">
                     Respond to Messages
                 </a>
             </div>
         </div>
 
         <!-- News Section -->
-        <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg mt-10">
-            <h2 class="text-2xl font-semibold text-deepblue mb-6 text-center">What's new?</h2>
+        {% comment %} {% include "news_carousel.html" %} {% endcomment %}
 
-            <div class="relative w-full overflow-hidden">
-                <!-- Carousel Container -->
-                <div id="carousel-container" class="flex w-full transition-transform duration-500 ease-in-out">
-                    <div class="min-w-full flex flex-col items-center bg-white rounded-lg shadow-md p-6">
-                        <img src="{% static 'images/image1.jpg' %}" alt="Article 1" class="w-full h-48 rounded-lg mb-4 object-cover">
-                        <h5 class="text-lg font-semibold text-[#1c2b36] mb-2">Article 1</h5>
-                        <p class="text-sm text-[#5e6c7e] mb-4 text-center">Description of article 1.</p>
-                        <a href="#" class="bg-deepblue text-white py-2 px-6 rounded-lg hover:bg-skyblue transition duration-300">
-                            Read More
-                        </a>
-                    </div>
-                    <div class="min-w-full flex flex-col items-center bg-white rounded-lg shadow-md p-6">
-                        <img src="{% static 'images/bank_hero.jpg' %}" alt="Article 2" class="w-full h-48 rounded-lg mb-4 object-cover">
-                        <h5 class="text-lg font-semibold text-[#1c2b36] mb-2">Article 2</h5>
-                        <p class="text-sm text-[#5e6c7e] mb-4 text-center">Description of article 2.</p>
-                        <a href="#" class="bg-deepblue text-white py-2 px-6 rounded-lg hover:bg-skyblue transition duration-300">
-                            Read More
-                        </a>
-                    </div>
-                    <div class="min-w-full flex flex-col items-center bg-white rounded-lg shadow-md p-6">
-                        <img src="{% static 'images/image1.jpg' %}" alt="Article 3" class="w-full h-48 rounded-lg mb-4 object-cover">
-                        <h5 class="text-lg font-semibold text-[#1c2b36] mb-2">Article 3</h5>
-                        <p class="text-sm text-[#5e6c7e] mb-4 text-center">Description of article 3.</p>
-                        <a href="#" class="bg-deepblue text-white py-2 px-6 rounded-lg hover:bg-skyblue transition duration-300">
-                            Read More
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Navigation Buttons -->
-                <button id="prev-btn" class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-deepblue transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#1c2b36]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                    </svg>
-                </button>
-                <button id="next-btn" class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-deepblue transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#1c2b36]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const container = document.getElementById('carousel-container');
-                const prevBtn = document.getElementById('prev-btn');
-                const nextBtn = document.getElementById('next-btn');
-                let currentIndex = 0;
-                const totalItems = container.children.length;
-
-                function updateCarousel() {
-                    container.style.transform = `translateX(-${currentIndex * 100}%)`;
-                }
-
-                prevBtn.addEventListener('click', () => {
-                    currentIndex = (currentIndex === 0) ? totalItems - 1 : currentIndex - 1;
-                    updateCarousel();
-                });
-
-                nextBtn.addEventListener('click', () => {
-                    currentIndex = (currentIndex === totalItems - 1) ? 0 : currentIndex + 1;
-                    updateCarousel();
-                });
-            });
-        </script>
+        
     </main>
 </div>
 

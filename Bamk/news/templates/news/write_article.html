@@ -1,39 +1,64 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container mt-5">
-    <h2>Write an article </h2>
+<div class="max-w-4xl mx-auto mt-10 bg-white p-8 shadow-lg rounded-lg">
+    <h2 class="text-3xl font-semibold text-deepblue mb-6">Write an Article</h2>
 
     {% if messages %}
-        <div class="alert alert-info">
+        <div class="mb-4 p-4 bg-blue-100 text-blue-800 rounded-lg">
             {% for message in messages %}
                 {{ message }}
             {% endfor %}
         </div>
     {% endif %}
 
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
         {% csrf_token %}
-        <div class="mb-3">
-            <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
+
+        <div>
+            <label for="{{ form.title.id_for_label }}" class="block text-gray-700 font-medium mb-2">Title</label>
             {{ form.title }}
         </div>
 
-        <div class="mb-3">
-            <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+        <div>
+            <label for="{{ form.description.id_for_label }}" class="block text-gray-700 font-medium mb-2">Description</label>
             {{ form.description }}
         </div>
 
-        <div class="mb-3">
-            <label for="{{ form.content.id_for_label }}" class="form-label">Content</label>
+        <div>
+            <label for="{{ form.content.id_for_label }}" class="block text-gray-700 font-medium mb-2">Content</label>
             {{ form.content }}
         </div>
 
-        <div class="mb-3">
-            <label for="{{ form.image.id_for_label }}" class="form-label">Image</label>
+        <div>
+            <label for="{{ form.image.id_for_label }}" class="block text-gray-700 font-medium mb-2">Image</label>
             {{ form.image }}
+            <img id="preview" class="mt-4 hidden w-full h-64 object-cover rounded-lg shadow-md" />
         </div>
 
-        <button type="submit" class="btn btn-primary">Publish</button>
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-deepblue font-semibold py-2 px-4 rounded-lg transition">
+            Publish
+        </button>
     </form>
+</div>
+
+<script>
+    // Script pour afficher un aperçu de l'image uploadée
+    document.querySelector("#id_image").addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById("preview");
+                preview.src = e.target.result;
+                preview.classList.remove("hidden");
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+<div class="mt-8 flex justify-start">
+    <a href="javascript:history.back()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg shadow hover:bg-gray-400 transition">
+        ← Back
+    </a>
 </div>
 {% endblock %}

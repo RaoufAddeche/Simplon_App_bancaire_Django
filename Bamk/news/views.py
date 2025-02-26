@@ -6,10 +6,11 @@ from .forms import NewsForm
 
 def list_news(request):
     articles = News.objects.all()
+    print("Articles récupérés :", articles)
     context = {
         'news' : articles
     }
-    return render(request=request, template_name='list_articles.html', context=context)
+    return render(request, "news/list_articles.html", {"news": articles})
 
 @login_required
 def create_news(request):

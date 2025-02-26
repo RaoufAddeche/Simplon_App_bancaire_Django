@@ -64,7 +64,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'user.middleware.JWTAuthMiddleware',
     "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 

@@ -43,3 +43,8 @@ class LoanRequestForm(forms.Form):
         label="Durée (mois)",
         widget=forms.NumberInput(attrs={'class': 'form-control'})
     )
+    class Meta:
+        fields = ['State', 'NAICS', 'NewExist', 'RetainedJob', 'FranchiseCode', 'UrbanRural', 'GrAppv', 'Bank', 'Term']
+    
+    def save(self, commit=True):
+        pass

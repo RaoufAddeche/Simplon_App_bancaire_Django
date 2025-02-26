@@ -1,0 +1,64 @@
+{% extends "navbar.html" %}
+{% load static %}
+
+{% block title %}{{ client.user.username }}'s File - BAMK{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">{{ client.user.username }}'s File</h2>
+
+    <div class="grid grid-cols-2 gap-8">
+        <!-- Personal Information -->
+        <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">Personal Information</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <p class="text-gray-600">Name:</p>
+                    <p class="text-gray-800 font-medium">{{ client.user.username }} </p>
+                </div>
+                <div>
+                    <p class="text-gray-600">Email:</p>
+                    <p class="text-gray-800 font-medium">{{ client.user.email }}</p>
+                </div>
+                
+            </div>
+        </div>
+
+        <!-- Loan Information -->
+        <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">Loan Information</h3>
+
+            {% if loans %}
+                <table class="w-full border-collapse bg-white shadow-md rounded-lg">
+                    <thead class="bg-deepblue text-white">
+                        <tr>
+                            <th class="px-4 py-2 text-left">Amount</th>
+                            <th class="px-4 py-2 text-left">Status</th>
+                            <th class="px-4 py-2 text-left">Term</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y">
+                        {% for loan in loans %}
+                        <tr class="hover:bg-gray-100">
+                            <td class="px-4 py-2">{{ loan.amount }} €</td>
+                            <td class="px-4 py-2">{{ loan.status }}</td>
+                            <td class="px-4 py-2">{{ loan.term }} months</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-gray-600">No loan records found.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="mt-8 flex justify-start">
+    <a href="javascript:history.back()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg shadow hover:bg-gray-400 transition">
+        ← Back
+    </a>
+</div>
+
+
+{% endblock %}

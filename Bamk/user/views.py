@@ -36,6 +36,7 @@ class UserLoginView(AuthLoginView):
 
 class ClientDashboardView(TemplateView):
     template_name = 'client.html'
+    
 
 class AdvisorDashboardView(TemplateView):
     template_name = 'advisor.html'

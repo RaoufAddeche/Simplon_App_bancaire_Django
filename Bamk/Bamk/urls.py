@@ -14,14 +14,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+# Bank/urls.py
 from django.contrib import admin
+from django.urls import path, include
 from django.urls import include, path
 from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('user.urls')),
+    path('loans/', include('loan.urls')),
+
     path('chat/', include(('chat.urls', 'chat'), namespace='chat')),
     path('', RedirectView.as_view(url='home')),
-    path("__reload__/", include("django_browser_reload.urls")),
+    # path("__reload__/", include("django_browser_reload.urls")),
 ]

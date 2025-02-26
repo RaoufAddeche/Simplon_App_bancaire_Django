@@ -17,4 +17,5 @@ urlpatterns = [
     path('client/', ClientDashboardView.as_view(), name='client_dashboard'),
     path('advisor/', AdvisorDashboardView.as_view(), name='advisor_dashboard'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    path("__reload__/", include("django_browser_reload.urls")),
 ]

@@ -15,6 +15,19 @@
             Chat with your advisor
         </a>
     </div>
+    
+    <!-- Nouvelle section pour les prêts -->
+    <div class="mt-8">
+        <h3 class="text-2xl font-bold text-deepblue">Loan Services</h3>
+        <div class="mt-4 grid grid-cols-2 gap-4">
+            <a href="{% url 'loan_request' %}" class="bg-green-600 text-white p-4 rounded-lg shadow hover:bg-green-700 text-center">
+                Apply for New Loan
+            </a>
+            <a href="{% url 'user_loans' %}" class="bg-blue-600 text-white p-4 rounded-lg shadow hover:bg-blue-700 text-center">
+                View My Loan History
+            </a>
+        </div>
+    </div>
 </div>
 
 <!-- News Section -->

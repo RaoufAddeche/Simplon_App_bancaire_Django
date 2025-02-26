@@ -30,7 +30,7 @@ class UserLoginView(AuthLoginView):
         user = self.request.user
         # Redirect: advisors go to advisor dashboard, others to client dashboard.
         if user.is_staff:
-            return reverse_lazy('chat')
+            return reverse_lazy('advisor_dashboard')
         else:
             return reverse_lazy('client_dashboard')
 

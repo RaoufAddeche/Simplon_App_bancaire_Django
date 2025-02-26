@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Room</title>
+</head>
+<body>
+    <h2>Chat Room</h2>
+    <div id="chat-box">
+        {% for message in messages %}
+            <p><strong>{{ message.user.username }}:</strong> {{ message.content }}</p>
+        {% endfor %}
+    </div>
+
+    <input id="message-input" type="text" placeholder="Écrire un message...">
+    <button id="send-button">Envoyer</button>
+
+    <script>
+        const chatSocket = new WebSocket("ws://" + window.location.host + "/ws/chat/");
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            document.getElementById("chat-box").innerHTML += "<p><strong>" + data.username + ":</strong> " + data.message + "</p>";
+        };
+
+        document.getElementById("send-button").onclick = function() {
+            const messageInput = document.getElementById("message-input");
+            chatSocket.send(JSON.stringify({
+                "message": messageInput.value,
+                "username": "{{ user.username }}"
+            }));
+            messageInput.value = "";
+        };
+    </script>
+</body>
+</html>

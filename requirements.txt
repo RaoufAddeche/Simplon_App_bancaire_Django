@@ -30,3 +30,8 @@ txaio==23.1.1
 typing_extensions==4.12.2
 whitenoise==6.9.0
 zope.interface==7.2
+channels==4.2.0
+Django==5.1.6
+channels_redis==4.2.1
+redis==5.2.1
+daphne==4.2.0

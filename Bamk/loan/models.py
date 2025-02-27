@@ -1,23 +1,18 @@
 from django.db import models
-from django.conf import settings
+from user.models import User
 
-class Loan(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(
-        max_length=20,
-        choices=[('pending', 'Pending'), ('approved', 'Approved'), ('rejected', 'Rejected')],
-        default='pending'
-    )
-    assigned_to = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="assigned_loans"
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+class LoanRequest(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    state = models.CharField(max_length=2)
+    naics = models.IntegerField()
+    new_exist = models.IntegerField()
+    retained_job = models.IntegerField()
+    franchise_code = models.IntegerField()
+    urban_rural = models.IntegerField()
+    gr_appv = models.FloatField()
+    bank = models.CharField(max_length=255)
+    term = models.IntegerField()
+    prediction = models.FloatField(null=True, blank=True)  # Stockera la prédiction
 
     def __str__(self):
-        return f"Loan {self.id} - {self.status}"
+        return f"LoanRequest {self.id} - {self.state}"

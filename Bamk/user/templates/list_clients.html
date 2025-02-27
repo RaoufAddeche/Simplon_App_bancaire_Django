@@ -14,7 +14,8 @@
                     <tr>
                         <th class="px-6 py-3 text-left">Username</th>
                         <th class="px-6 py-3 text-left">Email</th>
-                        <th class="px-6 py-3 text-left">Actions</th>
+                        <th class="px-6 py-3 text-left">Files</th>
+                        <th class="px-6 py-3 text-left">Chat</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y">
@@ -23,8 +24,15 @@
                             <td class="px-6 py-4 text-center">{{ client.user.username }}</td>
                             <td class="px-6 py-4 text-center">{{ client.user.email }}</td>
                             <td class="px-6 py-4 text-center">
-                                <a href="{% url 'user:client_file' client.pk %}" class="text-blue-600 hover:underline">Client File</a>
+                                <a href="{% url 'user:client_file' client.pk %}" class="text-blue-600 hover:underline">📁</a>
                             </td>
+                            <td class="px-6 py-4 text-center">
+                                <a href="{% url 'chat:client_chat' client.user.pk %}" 
+                                   class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                                    💬
+                                </a>
+                            </td>
+                            
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -34,11 +42,7 @@
         <p class="text-gray-600">No clients assigned.</p>
     {% endif %}
 </div>
-<div class="mt-8 flex justify-start">
-    <a href="javascript:history.back()" class="px-4 py-2 bg-gray-300 text-navy rounded-lg shadow hover:bg-gray-400 transition">
-        ← Back
-    </a>
-</div>
+{% include "back_button.html" %}
 
 
 {% endblock %}

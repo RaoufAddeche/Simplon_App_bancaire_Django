@@ -1,5 +1,7 @@
 from django.urls import path
-from .views import  loan_request_view
+from .views import loan_request_view
+
+app_name = "loan"
 
 urlpatterns = [
     #path('connect/', connect_to_api, name='connect_to_api'),

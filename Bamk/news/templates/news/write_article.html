@@ -35,7 +35,7 @@
             <img id="preview" class="mt-4 hidden w-full h-64 object-cover rounded-lg shadow-md" />
         </div>
 
-        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-deepblue font-semibold py-2 px-4 rounded-lg transition">
+        <button type="submit" class="w-full bg-deepblue hover:bg-skyblue text-white font-semibold py-2 px-4 rounded-lg transition">
             Publish
         </button>
     </form>
@@ -56,9 +56,6 @@
         }
     });
 </script>
-<div class="mt-8 flex justify-start">
-    <a href="javascript:history.back()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg shadow hover:bg-gray-400 transition">
-        ← Back
-    </a>
-</div>
+<!-- Back Button -->
+{% include "back_button.html" %}
 {% endblock %}

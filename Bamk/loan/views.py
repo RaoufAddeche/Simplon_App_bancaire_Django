@@ -36,7 +36,7 @@ def loan_request_view(request):
     token = get_auth_token(EMAIL, PASSWORD)
     if not token:
         messages.error(request, "Impossible de se connecter à l'API")
-        return redirect("loan_request")  # Rediriger si l'authentification échoue
+        return redirect("loan:loan_request")  # Rediriger si l'authentification échoue
 
     if request.method == "POST":
         form = LoanRequestForm(request.POST)
@@ -76,3 +76,5 @@ def loan_request_view(request):
         form = LoanRequestForm()
 
     return render(request, "loan/form.html", {"form": form})
+
+

@@ -1,0 +1,110 @@
+{% extends "navbar.html" %}
+{% block content %}
+<div class="max-w-3xl mx-auto mt-10 bg-white p-6 shadow-lg rounded-lg flex flex-col h-[80vh]">
+    
+    <!-- Title & Connection Status -->
+    <div class="flex justify-between items-center pb-4 border-b">
+        <h2 class="text-2xl font-semibold text-gray-800">💬 Chat with {{ client.username }}</h2>
+    </div>
+
+    <!-- Message Area -->
+    <div id="chat-container" class="flex-1 overflow-y-auto p-4 space-y-2">
+        <ul id="chat-log" class="space-y-3">
+            {% for message in messages %}
+                <li class="flex {% if message.sender == request.user %}justify-end{% else %}justify-start{% endif %}">
+                    <div class="max-w-xs px-4 py-2 rounded-lg shadow-md {% if message.sender == request.user %} bg-blue-500 text-white {% else %} bg-gray-200 text-gray-800 {% endif %}">
+                        <span class="block font-semibold">{% if message.sender == request.user %}You{% else %}{{ message.sender.username }}{% endif %}</span>
+                        <p class="text-sm">{{ message.content }}</p>
+                        <span class="text-xs opacity-70 block text-right">{{ message.timestamp|date:"H:i" }}</span>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Input Bar -->
+    <div class="flex items-center space-x-2 border-t p-3 bg-gray-100">
+        <input id="message-input" type="text" placeholder="Type a message..." 
+               class="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" autocomplete="off">
+        <button id="send-button" 
+                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+            ➤ Send
+        </button>
+    </div>
+</div>
+
+<script>
+    const clientId = "{{ client.id }}";
+    const chatSocket = new WebSocket("ws://" + window.location.host + "/ws/chat/advisor/" + clientId + "/");
+
+    chatSocket.onopen = function () {
+        console.log("✅ WebSocket connected for client ID:", clientId);
+    };
+
+    chatSocket.onerror = function (error) {
+        console.error("❌ WebSocket error:", error);
+    };
+
+    chatSocket.onmessage = function (event) {
+        const data = JSON.parse(event.data);
+        console.log("📩 New message received:", data);
+
+        // Crée un nouvel élément pour afficher le message
+        const chatLog = document.getElementById("chat-log");
+        const newMessage = document.createElement("li");
+
+        newMessage.classList.add("flex");
+        if (data.username === "{{ request.user.username }}") {
+            newMessage.classList.add("justify-end");
+            newMessage.innerHTML = `
+                <div class="max-w-xs px-4 py-2 rounded-lg shadow-md bg-blue-500 text-white">
+                    <span class="block font-semibold">You</span>
+                    <p class="text-sm">${data.message}</p>
+                    <span class="text-xs opacity-70 block text-right">${data.timestamp}</span>
+                </div>`;
+        } else {
+            newMessage.classList.add("justify-start");
+            newMessage.innerHTML = `
+                <div class="max-w-xs px-4 py-2 rounded-lg shadow-md bg-gray-200 text-gray-800">
+                    <span class="block font-semibold">${data.username}</span>
+                    <p class="text-sm">${data.message}</p>
+                    <span class="text-xs opacity-70 block text-right">${data.timestamp}</span>
+                </div>`;
+        }
+
+        chatLog.appendChild(newMessage);
+
+        // Auto-scroll vers le bas
+        chatLog.scrollTop = chatLog.scrollHeight;
+    };
+
+    function sendMessage() {
+        const messageInput = document.getElementById("message-input");
+        const message = messageInput.value.trim();
+        const username = "{{ request.user.username }}";
+
+        if (message !== "") {
+            console.log("📤 Message sent:", message);
+            chatSocket.send(JSON.stringify({
+                "message": message,
+                "username": username
+            }));
+
+            messageInput.value = "";  // Clear input field
+        }
+    }
+
+    document.getElementById("send-button").onclick = sendMessage;
+
+    document.getElementById("message-input").addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
+</script>
+ 
+<!-- Back button -->
+{% include "back_button.html" %}
+
+{% endblock %}

@@ -9,7 +9,7 @@
     
     <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
         
-        <a href="{% url 'chat:chat' %}" class="bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center transition">
+        <a href="{% url 'chat:chat_room' %}" class="bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center transition">
             Chat with your advisor
         </a>
     </div>
@@ -17,14 +17,14 @@
     <!-- Nouvelle section pour les prêts -->
     <div class="mt-8">
         <h3 class="text-2xl font-bold text-deepblue">Loan Services</h3>
-        {% comment %} <div class="mt-4 grid grid-cols-2 gap-4">
-            <a href="{% url 'loan:loan_request' %}" class="bg-white text-deepblue p-4 rounded-lg shadow hover:bg-green-700 text-center">
+        <div class="mt-4 grid grid-cols-2 gap-4">
+            <a href="{% url 'loan:loan_request' %}" class="bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center transition">
                 Apply for New Loan
             </a>
-            <a href="{% url 'loan:user_loans' %}" class="bg-white text-deepblue p-4 rounded-lg shadow hover:bg-blue-700 text-center">
+            <a href="#" class="bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center transition">
                 View My Loan History
             </a>
-        </div> {% endcomment %}
+        </div>
     </div>
 </div>
 

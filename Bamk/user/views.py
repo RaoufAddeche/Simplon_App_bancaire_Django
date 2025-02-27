@@ -6,7 +6,7 @@ from django.contrib.auth import login
 from .forms import RegistrationForm
 from django.views.generic import ListView, DetailView
 from .models import Profile
-from loan.models import Loan
+from loan.models import LoanRequest
 from news.models import News
 import random
 
@@ -77,5 +77,5 @@ class ClientFileView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['loans'] = Loan.objects.filter(user=self.object.user)
+        context['loans'] = LoanRequest.objects.filter(user=self.object.user)
         return context

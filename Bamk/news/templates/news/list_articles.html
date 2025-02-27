@@ -1,17 +1,45 @@
-{% extends "base.html" %}
+{% extends "navbar.html" %}
 {% block content %}
-    <h1>Liste des articles</h1>
-    {% for article in news %}
-        <div>
-            <h2>{{ article.title }}</h2>
-            <p>Écrit par {{ article.created_by }} le {{ article.created_at|date:"d/m/Y" }}</p>
-            <p>{{ article.content|truncatewords:20 }}</p>
-            {% if article.image %}
-                <img src="{{ article.image.url }}" alt="Illustration" style="max-width: 300px;">
-            {% endif %}
-            <hr>
+<div class="max-w-6xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h1 class="text-3xl font-bold text-deepblue mb-6">My Articles</h1>
+
+    {% if news %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for article in news %}
+                <div class="bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition">
+                    {% if article.image %}
+                        <img src="{{ article.image.url }}" alt="Illustration" class="w-full h-40 object-cover rounded-md">
+                    {% endif %}
+
+                    <h2 class="text-xl font-semibold text-navy mt-4">{{ article.title }}</h2>
+                    <p class="text-gray-400 text-sm">Written by {{ article.created_by }} on {{ article.created_at|date:"d/m/Y" }}</p>
+                    
+                    <p class="text-gray-700 mt-2">{{ article.content|truncatewords:20 }}</p>
+                    
+                    <a href="{% url 'news:news_detail' article.pk %}" class="inline-block mt-4 text-deepblue hover:text-skyblue font-semibold">
+                        Read more →
+                    </a>
+
+                    <!-- Boutons Modifier et Supprimer -->
+                    <div class="mt-4 flex space-x-2">
+                        <a href="{% url 'news:news_edit' article.pk %}" class="px-4 py-2 text-deepblue rounded-lg hover:text-skyblue
+                         transition">
+                            ✏ Edit
+                        </a>
+                        <a href="{% url 'news:news_delete' article.pk %}" class="px-4 py-2 text-deepblue rounded-lg hover:text-skyblue transition">
+                            🗑 Delete
+                        </a>
+                    </div>
+                </div> 
+            {% endfor %}
         </div>
-    {% empty %}
-        <p>Aucun article disponible.</p>
-    {% endfor %}
+    {% else %}
+        <p class="text-gray-600 text-center">No articles available.</p>
+    {% endif %}
+</div>
+<div class="mt-8 flex justify-start">
+    <a href="{% url "user:advisor_dashboard" %}" class="px-4 py-2 bg-gray-300 text-navy rounded-lg shadow hover:bg-gray-400 transition">
+        ← Back
+    </a>
+</div>
 {% endblock %}

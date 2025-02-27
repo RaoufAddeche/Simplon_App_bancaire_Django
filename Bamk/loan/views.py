@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -79,3 +79,17 @@ def loan_request_view(request):
     return render(request, "loan/form.html", {"form": form})
 
 
+@login_required
+def client_history(request, client_id):
+    """Voir l'historique des prêts d'un client pour les conseillers"""
+    if not request.user.is_staff:
+        messages.error(request, "Accès non autorisé")
+        return redirect('home')
+
+    client = get_object_or_404(User, id=client_id)
+    loans = LoanRequest.objects.filter(user=client).order_by('-created_at')
+
+    return render(request, 'loan/client_history.html', {
+        'client': client,
+        'loans': loans
+    })

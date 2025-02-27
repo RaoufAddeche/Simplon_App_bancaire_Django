@@ -7,7 +7,7 @@ class News(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     description = models.TextField( blank=True, null=True)
     content = models.TextField()
-    image = models.ImageField(upload_to='news_images/', blank=True, null=True)  # Champ pour l'image
+    image = models.ImageField(upload_to='news_images/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
     def save(self, *args, **kwargs):

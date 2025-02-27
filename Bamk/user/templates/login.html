@@ -1,22 +1,72 @@
-{% extends "base.html" %}
-{% block title %}Login - BAMK{% endblock %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Login - BAMK{% endblock %}</title>
+    <link href="{% static 'css/dist/styles.css' %}" rel="stylesheet">
+</head>
 
 {% block content %}
-<div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg mt-10">
-    <h2 class="text-2xl font-bold text-deepblue mb-4 text-center">
-        Login to Your Account
-    </h2>    
-    <form method="post">
-        {% csrf_token %}
-        <label class="block mb-2 text-white">Username</label>
-        <input type="text" name="username" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-skyblue">
-        
-        <label class="block mt-4 mb-2 text-white">Password</label>
-        <input type="password" name="password" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-skyblue">
+<nav class="bg-navy text-white p-4 shadow-md">
+    <div class="container mx-auto flex justify-between items-center">
+        <a href="{% url 'user:home' %}" class="text-xl font-bold">BAMK</a>
+    </div>
+</nav>
+<div class="bg-gray-200 min-h-screen flex items-center justify-center px-4">
+    <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-xl space-y-6">
+        <h2 class="text-2xl font-bold text-deepblue text-center">
+            Login to Your Account
+        </h2>    
 
-        <button type="submit" class="w-full mt-6 bg-deepblue text-white py-2 rounded-lg hover:bg-skyblue">
-            Login
-        </button>
-    </form>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+
+            <div>
+                <label class="block text-navy font-semibold mb-1">Username</label>
+                <input type="text" name="username" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-skyblue focus:outline-none">
+            </div>
+
+            <div>
+                <label class="block text-navy font-semibold mb-1">Password</label>
+                <input type="password" name="password" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-skyblue focus:outline-none">
+            </div>
+
+            <button type="submit" class="w-full mt-4 bg-deepblue text-white py-2 rounded-lg hover:bg-skyblue transition">
+                Login
+            </button>
+        </form>
+
+        <!-- Help Button -->
+        <div class="mt-6 w-full flex justify-center">
+            <button onclick="toggleModal()" class="bg-gray-700 text-white py-2 px-6 rounded-lg hover:bg-gray-800">
+                Help / Card Opposition / Security
+            </button>
+        </div>
+    </div>
 </div>
+
+<!-- Help Modal -->
+<div id="helpModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center transition-opacity duration-300">
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm animate-fade-in">
+        <h3 class="text-xl font-semibold text-deepblue mb-4 text-center">Need Help?</h3>
+        <ul class="space-y-3">
+            <li><a href="#" class="block text-navy hover:text-skyblue">🔹 Contact Support</a></li>
+            <li><a href="#" class="block text-navy hover:text-skyblue">🔹 Report a Fraud</a></li>
+            <li><a href="#" class="block text-navy hover:text-skyblue">🔹 Block My Card</a></li>
+            <li><a href="#" class="block text-navy hover:text-skyblue">🔹 Security Guidelines</a></li>
+        </ul>
+        <button onclick="toggleModal()" class="mt-4 w-full bg-gray-700 text-white py-2 rounded-lg hover:bg-gray-800">
+            Close
+        </button>
+    </div>
+</div>
+
+<script>
+    function toggleModal() {
+        document.getElementById("helpModal").classList.toggle("hidden");
+    }
+</script>
+
 {% endblock %}

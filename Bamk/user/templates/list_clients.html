@@ -1,0 +1,48 @@
+{% extends "navbar.html" %}
+{% load static %}
+
+{% block title %}Client List - BAMK{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">List of Assigned Clients</h2>
+
+    {% if clients %}
+        <div class="overflow-x-auto">
+            <table class="w-full border-collapse bg-white shadow-md rounded-lg">
+                <thead class="bg-deepblue text-white">
+                    <tr>
+                        <th class="px-6 py-3 text-left">Username</th>
+                        <th class="px-6 py-3 text-left">Email</th>
+                        <th class="px-6 py-3 text-left">Files</th>
+                        <th class="px-6 py-3 text-left">Chat</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y">
+                    {% for client in clients %}
+                        <tr class="hover:bg-gray-100">
+                            <td class="px-6 py-4 text-center">{{ client.user.username }}</td>
+                            <td class="px-6 py-4 text-center">{{ client.user.email }}</td>
+                            <td class="px-6 py-4 text-center">
+                                <a href="{% url 'user:client_file' client.pk %}" class="text-blue-600 hover:underline">📁</a>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <a href="{% url 'chat:client_chat' client.user.pk %}" 
+                                   class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                                    💬
+                                </a>
+                            </td>
+                            
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-gray-600">No clients assigned.</p>
+    {% endif %}
+</div>
+{% include "back_button.html" %}
+
+
+{% endblock %}

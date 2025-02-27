@@ -1,19 +1,48 @@
-{% extends "base.html" %}
-{% block title %}Register - BAMK{% endblock %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Register - BAMK{% endblock %}</title>
+    <link href="{% static 'css/dist/styles.css' %}" rel="stylesheet">
+</head>
 
 {% block content %}
+<nav class="bg-navy text-white p-4 shadow-md">
+    <div class="container mx-auto flex justify-between items-center">
+        <a href="{% url 'user:home' %}" class="text-xl font-bold">BAMK</a>
+    </div>
+</nav>
+<div class="bg-gray-200 min-h-screen flex items-center justify-center px-4">
+    <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-xl space-y-6">
+        <h2 class="text-2xl font-bold text-deepblue text-center">
+            Create Your BAMK Account
+        </h2>    
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
 
-<div class="container bg-white rounded-lg shadow-lg w-full max-w-md mx-auto">
-    <form class="form px-6 py-8 space-y-4" method="post">
-        {% csrf_token %}
-        <h1 class="text-2xl font-bold text-deepblue mb-4 text-center">Create Your BAMK Account</h2>
+            <!-- Affichage des champs du formulaire Django avec un style amélioré -->
+            {% for field in form %}
+                <div>
+                    <label class="block text-navy font-semibold mb-1">{{ field.label }}</label>
+                    <div class="relative">
+                        {{ field }}
+                    </div>
+                    {% if field.help_text %}
+                        <p class="text-gray-500 text-xs mt-1">{{ field.help_text }}</p>
+                    {% endif %}
+                    {% if field.errors %}
+                        <p class="text-red-600 text-sm mt-1">{{ field.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
 
-        <!-- Formulaire Django rendu avec Tailwind -->
-        {{ form.as_p }}
-
-        <button type="submit" class="w-full mt-6 bg-deepblue text-white py-2 rounded-lg hover:bg-skyblue">
-            Sign Up
-        </button>
-    </form>
+            <button type="submit" class="w-full mt-4 bg-deepblue text-white py-2 rounded-lg hover:bg-skyblue transition">
+                Sign Up
+            </button>
+        </form>
+    </div>
 </div>
+
 {% endblock %}

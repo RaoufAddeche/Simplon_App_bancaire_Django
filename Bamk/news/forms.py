@@ -15,9 +15,9 @@ class NewsForm(forms.ModelForm):
         cleaned_data = super().clean()
 
         if not self.user:  # ✅ Vérification si l'utilisateur est bien passé
-            raise forms.ValidationError("L'utilisateur doit être connecté.")
+            raise forms.ValidationError("User must be connected.")
 
         if not self.user.is_staff:  # ✅ Vérification du rôle
-            raise forms.ValidationError("Seuls les utilisateurs staff peuvent créer des articles.")
+            raise forms.ValidationError("Only staff can create news.")
 
         return cleaned_data

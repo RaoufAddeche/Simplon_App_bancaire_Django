@@ -1,0 +1,42 @@
+{% extends "navbar.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto mt-10 bg-white p-8 shadow-lg rounded-lg">
+    <h2 class="text-3xl font-semibold text-deepblue mb-6">Edit Article</h2>
+
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+        
+        <div>
+            <label for="{{ form.title.id_for_label }}" class="block text-gray-700 font-medium mb-2">Title</label>
+            {{ form.title }}
+        </div>
+
+        <div>
+            <label for="{{ form.description.id_for_label }}" class="block text-gray-700 font-medium mb-2">Description</label>
+            {{ form.description }}
+        </div>
+
+        <div>
+            <label for="{{ form.content.id_for_label }}" class="block text-gray-700 font-medium mb-2">Content</label>
+            {{ form.content }}
+        </div>
+
+        <div>
+            <label for="{{ form.image.id_for_label }}" class="block text-gray-700 font-medium mb-2">Image</label>
+            {{ form.image }}
+            {% if object.image %}
+                <img src="{{ object.image.url }}" alt="Current Image" class="mt-4 w-full h-48 object-cover rounded-lg shadow-md">
+            {% endif %}
+        </div>
+
+        <div class="flex space-x-4">
+            <button type="submit" class="px-6 py-3 text-deepblue font-semibold rounded-lg hover:text-skyblue transition">
+                Save Changes
+            </button>
+            <a href="{% url 'news:news_list' %}" class="px-6 py-3 text-deepblue rounded-lg hover:text-skyblue transition">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

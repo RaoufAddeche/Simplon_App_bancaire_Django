@@ -3,5 +3,11 @@
 {% block content %}
   <h2>Résultat de la prédiction</h2>
   <p>Approval : <strong>{{ prediction }}</strong></p>
+
+  {% if shap_plot %}
+    <h3>Explication SHAP</h3>
+    <img src="{{ shap_plot }}" alt="SHAP Values">
+  {% endif %}
+
   <a href="{% url 'loan_request' %}">Faire une autre demande</a>
 {% endblock %}

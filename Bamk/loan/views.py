@@ -65,9 +65,10 @@ def loan_request_view(request):
 
             if response.status_code == 200:
                 prediction = response.json().get("eligible")
+                prediction_values = response.json()
                 loan_request.prediction = prediction
                 loan_request.save()
-                return render(request, "loan/result.html", {"prediction": prediction})
+                return render(request, "loan/result.html", {"prediction": prediction_values["eligible"], "shap_plot":prediction_values["shap_plot"] })
             else:
                 messages.error(request, "Erreur lors de la prédiction")
                 return render(request, "loan/error.html", {"error": "Erreur API"})

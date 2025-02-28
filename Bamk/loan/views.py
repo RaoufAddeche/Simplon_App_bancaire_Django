@@ -93,3 +93,8 @@ def client_history(request, client_id):
         'client': client,
         'loans': loans
     })
+@login_required
+def client_loans(request):
+    """Liste des prêts pour un client"""
+    loans = LoanRequest.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'loan/client_loans.html', {'loans': loans})

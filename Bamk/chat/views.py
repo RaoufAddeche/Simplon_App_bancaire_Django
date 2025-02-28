@@ -58,3 +58,17 @@ class ClientChatView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context["client"] = get_object_or_404(User, pk=self.kwargs["client_id"])
         return context
+    
+    def mark_messages_as_read(self):
+        """Marque tous les messages comme lus"""
+        messages = Message.objects.filter(receiver=self.request.user, sender=self.kwargs["client_id"], is_read=False)
+        messages.update(is_read=True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["client"] = get_object_or_404(User, pk=self.kwargs["client_id"])
+
+        # 🔴 Marquer les messages comme lus
+        self.mark_messages_as_read()
+
+        return context

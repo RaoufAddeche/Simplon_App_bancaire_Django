@@ -12,10 +12,10 @@
             <table class="w-full border-collapse bg-white shadow-md rounded-lg">
                 <thead class="bg-deepblue text-white">
                     <tr>
-                        <th class="px-6 py-3 text-left">Username</th>
-                        <th class="px-6 py-3 text-left">Email</th>
-                        <th class="px-6 py-3 text-left">Files</th>
-                        <th class="px-6 py-3 text-left">Chat</th>
+                        <th class="px-6 py-3 text-center">Username</th>
+                        <th class="px-6 py-3 text-center">Email</th>
+                        <th class="px-6 py-3 text-center">Files</th>
+                        <th class="px-6 py-3 text-center">Chat</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y">
@@ -24,15 +24,19 @@
                             <td class="px-6 py-4 text-center">{{ client.user.username }}</td>
                             <td class="px-6 py-4 text-center">{{ client.user.email }}</td>
                             <td class="px-6 py-4 text-center">
-                                <a href="{% url 'user:client_file' client.pk %}" class="text-blue-600 hover:underline">📁</a>
+                                <a href="{% url 'user:client_file' client.pk %}" class="text-deepblue hover:underline">📁</a>
                             </td>
-                            <td class="px-6 py-4 text-center">
+                            <td class="px-6 py-4 text-center relative">
                                 <a href="{% url 'chat:client_chat' client.user.pk %}" 
-                                   class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                                   class="relative inline-block px-4 py-2 bg-deepblue rounded-lg hover:bg-skyblue transition">
                                     💬
+                                    <!-- 🔴 Notification Badge -->
+                                    <span id="unread-badge-{{ client.user.pk }}" 
+                                          class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full px-2 py-1 hidden">
+                                        0
+                                    </span>
                                 </a>
                             </td>
-                            
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -42,7 +46,31 @@
         <p class="text-gray-600">No clients assigned.</p>
     {% endif %}
 </div>
+
 {% include "back_button.html" %}
 
+<!-- WebSocket for Message Notifications -->
+<script>
+    const notificationSocket = new WebSocket("ws://" + window.location.host + "/ws/notifications/");
+
+    notificationSocket.onmessage = function (event) {
+        const data = JSON.parse(event.data);
+
+        if (data.unread_count) {
+            for (const [clientId, count] of Object.entries(data.unread_count)) {
+                const unreadBadge = document.getElementById("unread-badge-" + clientId);
+
+                if (unreadBadge) {
+                    if (count > 0) {
+                        unreadBadge.textContent = count;
+                        unreadBadge.classList.remove("hidden");
+                    } else {
+                        unreadBadge.classList.add("hidden");
+                    }
+                }
+            }
+        }
+    };
+</script>
 
 {% endblock %}

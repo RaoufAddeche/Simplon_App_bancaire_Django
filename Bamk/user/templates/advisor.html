@@ -17,6 +17,12 @@
                 List Your Articles
             </a>
         </div>
+        <!-- Ajout du lien pour les prêts à valider -->
+        <div class="mt-6">
+            <a href="{% url 'loan:advisor_loans' %}" class="block bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center">
+                Validate Loans
+            </a>
+        </div>
     </aside>
 
     <!-- Main Content -->
@@ -28,7 +34,11 @@
             <div class="mt-6 grid grid-cols-2 gap-4">
                 <a href="{% url 'user:list_clients' %}" class="bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center">
                     List of Assigned Clients
-                </a>                
+                </a>
+                <!-- Ajout du lien pour les prêts à valider -->
+                <a href="{% url 'loan:advisor_loans' %}" class="bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center">
+                    Validate Loan Requests
+                </a>
             </div>
         </div>
 

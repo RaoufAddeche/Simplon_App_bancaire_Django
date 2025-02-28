@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>Faire une demande de prêt</h2>
+  <h2 class="text-3xl font-bold text-deepblue">Request for a loan</h2>
   <form action="/loan/request/" method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Soumettre</button>
+    <button class="bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center transition" type="submit">Submit</button>
   </form>
 {% endblock %}

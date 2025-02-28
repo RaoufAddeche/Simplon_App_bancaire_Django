@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -65,9 +65,10 @@ def loan_request_view(request):
 
             if response.status_code == 200:
                 prediction = response.json().get("eligible")
+                prediction_values = response.json()
                 loan_request.prediction = prediction
                 loan_request.save()
-                return render(request, "loan/result.html", {"prediction": prediction})
+                return render(request, "loan/result.html", {"prediction": prediction_values["eligible"], "shap_plot":prediction_values["shap_plot"] })
             else:
                 messages.error(request, "Erreur lors de la prédiction")
                 return render(request, "loan/error.html", {"error": "Erreur API"})
@@ -78,3 +79,22 @@ def loan_request_view(request):
     return render(request, "loan/form.html", {"form": form})
 
 
+@login_required
+def client_history(request, client_id):
+    """Voir l'historique des prêts d'un client pour les conseillers"""
+    if not request.user.is_staff:
+        messages.error(request, "Accès non autorisé")
+        return redirect('home')
+
+    client = get_object_or_404(User, id=client_id)
+    loans = LoanRequest.objects.filter(user=client).order_by('-created_at')
+
+    return render(request, 'loan/client_history.html', {
+        'client': client,
+        'loans': loans
+    })
+@login_required
+def client_loans(request):
+    """Liste des prêts pour un client"""
+    loans = LoanRequest.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'loan/client_loans.html', {'loans': loans})
